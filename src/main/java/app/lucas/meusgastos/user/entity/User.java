@@ -25,7 +25,6 @@ public class User {
 
 
     public static final class UserBuilder {
-        private Long id;
         private String name;
         private String lastname;
         private Double salary;
@@ -37,11 +36,6 @@ public class User {
 
         public static UserBuilder builder() {
             return new UserBuilder();
-        }
-
-        public UserBuilder id(Long id) {
-            this.id = id;
-            return this;
         }
 
         public UserBuilder name(String name) {
@@ -75,7 +69,6 @@ public class User {
             user.salary = this.salary;
             user.password = this.password;
             user.name = this.name;
-            user.id = this.id;
             user.email = this.email;
             user.lastname = this.lastname;
             user.username = this.name + this.lastname + random.nextInt(1000000);

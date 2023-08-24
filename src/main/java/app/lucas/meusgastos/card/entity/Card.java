@@ -21,7 +21,6 @@ public class Card {
     private String color;
 
     public static final class CardBuilder {
-        private Long id;
         private String name;
         private String username;
         private String color;
@@ -31,11 +30,6 @@ public class Card {
 
         public static CardBuilder builder() {
             return new CardBuilder();
-        }
-
-        public CardBuilder id(Long id) {
-            this.id = id;
-            return this;
         }
 
         public CardBuilder name(String name) {
@@ -58,7 +52,6 @@ public class Card {
             card.name = this.name;
             card.username = this.username;
             card.color = this.color;
-            card.id = this.id;
             return card;
         }
     }
