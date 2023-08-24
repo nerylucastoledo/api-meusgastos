@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record UserDTO(
-        Long id,
-        @NotBlank(message = "Nome não pode ser vazio!")
         String name,
         @NotBlank(message = "Sobrenome não pode ser vazio!")
         String lastname,
