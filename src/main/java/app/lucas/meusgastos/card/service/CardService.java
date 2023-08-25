@@ -1,7 +1,7 @@
 package app.lucas.meusgastos.card.service;
 
 import app.lucas.meusgastos.card.dto.CardDTO;
-import app.lucas.meusgastos.card.dto.CardResponseDTO;
+import app.lucas.meusgastos.card.dto.CardIdNameColorDTO;
 import app.lucas.meusgastos.card.entity.Card;
 import app.lucas.meusgastos.card.repository.CardRepository;
 import jakarta.transaction.Transactional;
@@ -18,7 +18,7 @@ public class CardService {
     private CardRepository cardRepository;
 
     @Transactional
-    public CardDTO save(CardDTO cardDTO) {
+    public CardIdNameColorDTO save(CardDTO cardDTO) {
         Card card = Card.CardBuilder
                 .builder()
                 .name(cardDTO.name())
@@ -27,27 +27,27 @@ public class CardService {
                 .build();
 
         cardRepository.save(card);
-        return cardDTO;
+        return new CardIdNameColorDTO(card.getId(), cardDTO.name(), cardDTO.color());
     }
 
-    public List<CardResponseDTO> findAll() {
+    public List<CardIdNameColorDTO> findAll() {
         List<Card> cardList = cardRepository.findAll();
-        List<CardResponseDTO> cardResponseAllDTOList = new ArrayList<>();
+        List<CardIdNameColorDTO> cardResponseAllDTOList = new ArrayList<>();
 
         for (Card card : cardList) {
-            CardResponseDTO cardNameIdDTO = new CardResponseDTO(
+            CardIdNameColorDTO cardIdNameColorDTO = new CardIdNameColorDTO(
                     card.getId(),
                     card.getName(),
                     card.getColor());
-            cardResponseAllDTOList.add(cardNameIdDTO);
+            cardResponseAllDTOList.add(cardIdNameColorDTO);
         }
         return cardResponseAllDTOList;
     }
 
-    public void update(CardResponseDTO cardResponseDTO) {
-        Card savedCard = findBYIdOrThrowError(cardResponseDTO.id());
-        savedCard.setName(cardResponseDTO.name());
-        savedCard.setColor(cardResponseDTO.color());
+    public void update(CardIdNameColorDTO cardIdNameColorDTO) {
+        Card savedCard = findBYIdOrThrowError(cardIdNameColorDTO.id());
+        savedCard.setName(cardIdNameColorDTO.name());
+        savedCard.setColor(cardIdNameColorDTO.color());
         cardRepository.save(savedCard);
     }
 

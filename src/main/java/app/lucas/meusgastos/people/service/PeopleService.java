@@ -1,7 +1,7 @@
 package app.lucas.meusgastos.people.service;
 
-import app.lucas.meusgastos.people.dto.PeopleDTO;
-import app.lucas.meusgastos.people.dto.PeopleNameIdDTO;
+import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.people.dto.PeopleRequestDTO;
 import app.lucas.meusgastos.people.entity.People;
 import app.lucas.meusgastos.people.repository.PeopleRepository;
 import jakarta.transaction.Transactional;
@@ -18,7 +18,7 @@ public class PeopleService {
     private PeopleRepository peopleRepository;
 
     @Transactional
-    public PeopleDTO save(PeopleDTO peopleDTO) {
+    public NameIdDTO save(PeopleRequestDTO peopleDTO) {
         People people = People.PeopleBuilder
                 .builder()
                 .name(peopleDTO.name())
@@ -26,23 +26,23 @@ public class PeopleService {
                 .build();
 
         peopleRepository.save(people);
-        return peopleDTO;
+        return new NameIdDTO(people.getId(), peopleDTO.name());
     }
 
-    public List<PeopleNameIdDTO> findAll() {
+    public List<NameIdDTO> findAll() {
         List<People> peopleList = peopleRepository.findAll();
-        List<PeopleNameIdDTO> peopleResponseAllDTOList = new ArrayList<>();
+        List<NameIdDTO> peopleResponseList = new ArrayList<>();
 
         for (People people : peopleList) {
-            PeopleNameIdDTO peopleNameIdDTO = new PeopleNameIdDTO(
+            NameIdDTO peopleNameId = new NameIdDTO(
                     people.getId(),
                     people.getName());
-            peopleResponseAllDTOList.add(peopleNameIdDTO);
+            peopleResponseList.add(peopleNameId);
         }
-        return peopleResponseAllDTOList;
+        return peopleResponseList;
     }
 
-    public void update(PeopleNameIdDTO peopleNameIdDTO) {
+    public void update(NameIdDTO peopleNameIdDTO) {
         People savedPeople = findBYIdOrThrowError(peopleNameIdDTO.id());
         savedPeople.setName(peopleNameIdDTO.name());
         peopleRepository.save(savedPeople);

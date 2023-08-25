@@ -1,10 +1,9 @@
 package app.lucas.meusgastos.category.service;
 
-import app.lucas.meusgastos.category.dto.CategoryNameDTO;
-import app.lucas.meusgastos.category.dto.CategoryNameIdDTO;
 import app.lucas.meusgastos.category.dto.CategoryPostDTO;
 import app.lucas.meusgastos.category.entity.Category;
 import app.lucas.meusgastos.category.repository.CategoryRepository;
+import app.lucas.meusgastos.generic.dto.NameIdDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     @Transactional
-    public CategoryNameDTO save(CategoryPostDTO categoryDTO) {
+    public NameIdDTO save(CategoryPostDTO categoryDTO) {
         Category category = Category.CategoryBuilder
                 .builder()
                 .name(categoryDTO.name())
@@ -27,21 +26,20 @@ public class CategoryService {
                 .build();
 
         categoryRepository.save(category);
-        return new CategoryNameDTO(categoryDTO.name());
+        return new NameIdDTO(category.getId(), categoryDTO.name());
     }
 
-    public List<CategoryNameIdDTO> findAll() {
+    public List<NameIdDTO> findAll() {
         List<Category> categoryList = categoryRepository.findAll();
-        List<CategoryNameIdDTO> categoryResponseAllDTOList = new ArrayList<>();
+        List<NameIdDTO> categoryResponseList = new ArrayList<>();
 
         for (Category category : categoryList) {
-            CategoryNameIdDTO categoryNameIdDTO = new CategoryNameIdDTO(
+            NameIdDTO categoryNameId = new NameIdDTO(
                     category.getId(),
                     category.getName());
-            categoryResponseAllDTOList.add(categoryNameIdDTO);
+            categoryResponseList.add(categoryNameId);
         }
-
-        return categoryResponseAllDTOList;
+        return categoryResponseList;
     }
 
     public void delete(Long id) {
@@ -49,7 +47,7 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
-    public void update(CategoryNameIdDTO categoryNameIdDTO) {
+    public void update(NameIdDTO categoryNameIdDTO) {
         Category savedCategory = findBYIdOrThrowError(categoryNameIdDTO.id());
         savedCategory.setName(categoryNameIdDTO.name());
         categoryRepository.save(savedCategory);

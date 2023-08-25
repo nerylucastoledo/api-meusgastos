@@ -8,6 +8,6 @@ public record CardDTO(
         String name,
         @NotBlank(message = "Username deve ser válido!")
         String username,
-        @NotNull(message = "Cor do cartão não pode ser vazia!")
+        @NotBlank(message = "Cor do cartão não pode ser vazia!")
         String color
 ) { }

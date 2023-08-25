@@ -1,7 +1,7 @@
 package app.lucas.meusgastos.people.controller;
 
-import app.lucas.meusgastos.people.dto.PeopleDTO;
-import app.lucas.meusgastos.people.dto.PeopleNameIdDTO;
+import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.people.dto.PeopleRequestDTO;
 import app.lucas.meusgastos.people.service.PeopleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +19,17 @@ public class PeopleController {
     private PeopleService peopleService;
 
     @PostMapping
-    public ResponseEntity save(@RequestBody @Valid PeopleDTO peopleDTO) {
+    public ResponseEntity<NameIdDTO> save(@RequestBody @Valid PeopleRequestDTO peopleDTO) {
         return new ResponseEntity(peopleService.save(peopleDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<PeopleNameIdDTO> findAll() {
+    public List<NameIdDTO> findAll() {
         return peopleService.findAll();
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody @Valid PeopleNameIdDTO peopleNameIdDTO) {
+    public ResponseEntity update(@RequestBody @Valid NameIdDTO peopleNameIdDTO) {
         peopleService.update(peopleNameIdDTO);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

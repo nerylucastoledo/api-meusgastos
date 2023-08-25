@@ -1,7 +1,7 @@
 package app.lucas.meusgastos.card.controller;
 
 import app.lucas.meusgastos.card.dto.CardDTO;
-import app.lucas.meusgastos.card.dto.CardResponseDTO;
+import app.lucas.meusgastos.card.dto.CardIdNameColorDTO;
 import app.lucas.meusgastos.card.service.CardService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +19,18 @@ public class CardController {
     private CardService cardService;
 
     @PostMapping
-    public ResponseEntity save(@RequestBody @Valid CardDTO cardDTO) {
+    public ResponseEntity<CardIdNameColorDTO> save(@RequestBody @Valid CardDTO cardDTO) {
         return new ResponseEntity(cardService.save(cardDTO), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<CardResponseDTO> findAll() {
+    public List<CardIdNameColorDTO> findAll() {
         return cardService.findAll();
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody @Valid CardResponseDTO cardNameIdDTO) {
-        cardService.update(cardNameIdDTO);
+    public ResponseEntity update(@RequestBody @Valid CardIdNameColorDTO cardIdNameColorDTO) {
+        cardService.update(cardIdNameColorDTO);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
