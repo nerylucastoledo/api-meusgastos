@@ -23,7 +23,6 @@ public class User {
     private String email;
     private String password;
 
-
     public static final class UserBuilder {
         private String name;
         private String lastname;

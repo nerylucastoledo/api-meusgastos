@@ -34,10 +34,10 @@ public class PeopleService {
         List<PeopleNameIdDTO> peopleResponseAllDTOList = new ArrayList<>();
 
         for (People people : peopleList) {
-            PeopleNameIdDTO peopleResponseAllDTO = new PeopleNameIdDTO(
+            PeopleNameIdDTO peopleNameIdDTO = new PeopleNameIdDTO(
                     people.getId(),
                     people.getName());
-            peopleResponseAllDTOList.add(peopleResponseAllDTO);
+            peopleResponseAllDTOList.add(peopleNameIdDTO);
         }
         return peopleResponseAllDTOList;
     }

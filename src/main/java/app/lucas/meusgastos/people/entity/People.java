@@ -19,7 +19,6 @@ public class People {
     private String name;
     private String username;
 
-
     public static final class PeopleBuilder {
         private String name;
         private String username;

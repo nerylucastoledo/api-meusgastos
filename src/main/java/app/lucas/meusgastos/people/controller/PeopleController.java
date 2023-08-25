@@ -29,7 +29,7 @@ public class PeopleController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody PeopleNameIdDTO peopleNameIdDTO) {
+    public ResponseEntity update(@RequestBody @Valid PeopleNameIdDTO peopleNameIdDTO) {
         peopleService.update(peopleNameIdDTO);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

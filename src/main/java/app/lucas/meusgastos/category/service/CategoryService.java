@@ -35,10 +35,10 @@ public class CategoryService {
         List<CategoryNameIdDTO> categoryResponseAllDTOList = new ArrayList<>();
 
         for (Category category : categoryList) {
-            CategoryNameIdDTO categoryResponseAllDTO = new CategoryNameIdDTO(
+            CategoryNameIdDTO categoryNameIdDTO = new CategoryNameIdDTO(
                     category.getId(),
                     category.getName());
-            categoryResponseAllDTOList.add(categoryResponseAllDTO);
+            categoryResponseAllDTOList.add(categoryNameIdDTO);
         }
 
         return categoryResponseAllDTOList;
