@@ -1,6 +1,10 @@
 package app.lucas.meusgastos.user.service;
 
+import app.lucas.meusgastos.exceptions.BadRequestException;
+import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.people.entity.People;
 import app.lucas.meusgastos.user.dto.UserDTO;
+import app.lucas.meusgastos.user.dto.UserSalaryDTO;
 import app.lucas.meusgastos.user.entity.User;
 import app.lucas.meusgastos.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -14,7 +18,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
-    public UserDTO save(UserDTO userDTO) {
+    public NameIdDTO save(UserDTO userDTO) {
         User user = User.UserBuilder
                 .builder()
                 .name(userDTO.name())
@@ -25,6 +29,17 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        return userDTO;
+        return new NameIdDTO(user.getId(), userDTO.name());
+    }
+
+    public void updateSalary(UserSalaryDTO userSalaryDTO) {
+        User user = findBYIdOrThrowError(userSalaryDTO.id());
+        user.setSalary(userSalaryDTO.salary());
+        userRepository.save(user);
+    }
+
+    private User findBYIdOrThrowError(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Usuário não encontrado"));
     }
 }

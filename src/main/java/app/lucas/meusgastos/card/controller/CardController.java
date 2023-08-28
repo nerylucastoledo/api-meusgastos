@@ -2,13 +2,18 @@ package app.lucas.meusgastos.card.controller;
 
 import app.lucas.meusgastos.card.dto.CardDTO;
 import app.lucas.meusgastos.card.dto.CardIdNameColorDTO;
+import app.lucas.meusgastos.card.dto.CardResponseApiDTO;
 import app.lucas.meusgastos.card.service.CardService;
+import app.lucas.meusgastos.exceptions.BadRequestException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -19,19 +24,25 @@ public class CardController {
     private CardService cardService;
 
     @PostMapping
-    public ResponseEntity<CardIdNameColorDTO> save(@RequestBody @Valid CardDTO cardDTO) {
-        return new ResponseEntity(cardService.save(cardDTO), HttpStatus.CREATED);
+    public CardResponseApiDTO save(@RequestBody @Valid CardDTO cardDTO) {
+        CardIdNameColorDTO cardIdNameColorDTO = cardService.save(cardDTO);
+        return new CardResponseApiDTO(HttpStatus.CREATED.value(), new ArrayList<>(Collections.singleton(cardIdNameColorDTO)));
     }
 
     @GetMapping
-    public List<CardIdNameColorDTO> findAll() {
-        return cardService.findAll();
+    public CardResponseApiDTO findAll() {
+        List<CardIdNameColorDTO> cardIdNameColorDTOList = cardService.findAll();
+        return new CardResponseApiDTO(HttpStatus.OK.value(), cardIdNameColorDTOList);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody @Valid CardIdNameColorDTO cardIdNameColorDTO) {
-        cardService.update(cardIdNameColorDTO);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity update(@RequestBody @Valid CardIdNameColorDTO cardIdNameColorDTO, @PathVariable Long id) {
+        if (id.equals(cardIdNameColorDTO.id())) {
+            cardService.update(cardIdNameColorDTO);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } else {
+            throw new BadRequestException("ID da url diferente do contéudo");
+        }
     }
 
     @DeleteMapping(path = "/{id}")

@@ -12,6 +12,7 @@ import java.util.Random;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -73,5 +74,29 @@ public class User {
             user.username = this.name + this.lastname + random.nextInt(1000000);
             return user;
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
     }
 }
