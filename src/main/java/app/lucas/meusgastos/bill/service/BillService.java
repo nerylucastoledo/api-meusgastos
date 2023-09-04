@@ -27,11 +27,31 @@ public class BillService {
                         bill.getDescription(),
                         bill.getCard(),
                         bill.getPeople(),
-                        bill.getCategory()))
+                        bill.getCategory(),
+                        bill.getDate()))
                 .collect(Collectors.toList());
 
         return billList;
     }
+
+    public List<BillResponseDTO> findAll(String username, String year) {
+        List<Bill> allDataByUsername = billRepository.findAllByDateContainingYearAndUsername(username, year);
+
+        List<BillResponseDTO> billList = allDataByUsername.stream()
+                .filter(bill -> bill.getPeople().equals("Eu"))
+                .map(bill -> new BillResponseDTO(
+                        bill.getItem(),
+                        bill.getValue(),
+                        bill.getDescription(),
+                        bill.getCard(),
+                        bill.getPeople(),
+                        bill.getCategory(),
+                        bill.getDate()))
+                .collect(Collectors.toList());
+
+        return billList;
+    }
+
 
     public void save(BillPostDTO billPostDTO) {
         Bill bill = Bill.BillBuilder

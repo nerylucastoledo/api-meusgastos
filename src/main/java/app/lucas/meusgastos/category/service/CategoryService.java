@@ -1,6 +1,7 @@
 package app.lucas.meusgastos.category.service;
 
 import app.lucas.meusgastos.category.dto.CategoryPostDTO;
+import app.lucas.meusgastos.category.dto.CategoryPutDTO;
 import app.lucas.meusgastos.category.entity.Category;
 import app.lucas.meusgastos.category.repository.CategoryRepository;
 import app.lucas.meusgastos.generic.dto.NameIdDTO;
@@ -29,8 +30,8 @@ public class CategoryService {
         return new NameIdDTO(category.getId(), categoryDTO.name());
     }
 
-    public List<NameIdDTO> findAll() {
-        List<Category> categoryList = categoryRepository.findAll();
+    public List<NameIdDTO> findAll(String username) {
+        List<Category> categoryList = categoryRepository.findAllByUsername(username);
         List<NameIdDTO> categoryResponseList = new ArrayList<>();
 
         for (Category category : categoryList) {
@@ -47,10 +48,13 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
-    public void update(NameIdDTO categoryNameIdDTO) {
-        Category savedCategory = findBYIdOrThrowError(categoryNameIdDTO.id());
-        savedCategory.setName(categoryNameIdDTO.name());
-        categoryRepository.save(savedCategory);
+    public void update(CategoryPutDTO categoryPutDTO) {
+        Category savedCategory = findBYIdOrThrowError(categoryPutDTO.id());
+
+        if (savedCategory.getUsername().equals(categoryPutDTO.username())) {
+            savedCategory.setName(categoryPutDTO.name());
+            categoryRepository.save(savedCategory);
+        }
     }
 
     private Category findBYIdOrThrowError(Long id) {

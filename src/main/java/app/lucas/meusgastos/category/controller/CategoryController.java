@@ -2,6 +2,7 @@ package app.lucas.meusgastos.category.controller;
 
 import app.lucas.meusgastos.card.dto.CardResponseApiDTO;
 import app.lucas.meusgastos.category.dto.CategoryPostDTO;
+import app.lucas.meusgastos.category.dto.CategoryPutDTO;
 import app.lucas.meusgastos.category.dto.CategoryResponseApiDTO;
 import app.lucas.meusgastos.category.service.CategoryService;
 import app.lucas.meusgastos.exceptions.BadRequestException;
@@ -30,15 +31,19 @@ public class CategoryController {
     }
 
     @GetMapping
-    public CategoryResponseApiDTO findAll() {
-        List<NameIdDTO> nameIdDTOList = categoryService.findAll();
+    public CategoryResponseApiDTO findAll(@RequestParam String username) {
+        if (username.isEmpty()) {
+            throw new BadRequestException("Username não pode ser vazio");
+        }
+
+        List<NameIdDTO> nameIdDTOList = categoryService.findAll(username);
         return new CategoryResponseApiDTO(HttpStatus.OK.value(), nameIdDTOList);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody @Valid NameIdDTO categoryNameIdDTO, @PathVariable Long id) {
-        if (id.equals(categoryNameIdDTO.id())) {
-            categoryService.update(categoryNameIdDTO);
+    public ResponseEntity update(@RequestBody @Valid CategoryPutDTO categoryPutDTO, @PathVariable Long id) {
+        if (id.equals(categoryPutDTO.id())) {
+            categoryService.update(categoryPutDTO);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         } else {
             throw new BadRequestException("ID da url diferente do contéudo");

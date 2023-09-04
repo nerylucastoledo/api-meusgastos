@@ -64,6 +64,10 @@ public class Card {
         return name;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public String getColor() {
         return color;
     }

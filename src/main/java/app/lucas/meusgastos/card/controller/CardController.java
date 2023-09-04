@@ -2,6 +2,7 @@ package app.lucas.meusgastos.card.controller;
 
 import app.lucas.meusgastos.card.dto.CardDTO;
 import app.lucas.meusgastos.card.dto.CardIdNameColorDTO;
+import app.lucas.meusgastos.card.dto.CardPutDTO;
 import app.lucas.meusgastos.card.dto.CardResponseApiDTO;
 import app.lucas.meusgastos.card.service.CardService;
 import app.lucas.meusgastos.exceptions.BadRequestException;
@@ -30,18 +31,22 @@ public class CardController {
     }
 
     @GetMapping
-    public CardResponseApiDTO findAll() {
-        List<CardIdNameColorDTO> cardIdNameColorDTOList = cardService.findAll();
+    public CardResponseApiDTO findAll(@RequestParam String username) {
+        if (username.isEmpty()) {
+            throw new BadRequestException("Username não pode ser vazio");
+        }
+
+        List<CardIdNameColorDTO> cardIdNameColorDTOList = cardService.findAll(username);
         return new CardResponseApiDTO(HttpStatus.OK.value(), cardIdNameColorDTOList);
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity update(@RequestBody @Valid CardIdNameColorDTO cardIdNameColorDTO, @PathVariable Long id) {
-        if (id.equals(cardIdNameColorDTO.id())) {
-            cardService.update(cardIdNameColorDTO);
+    public ResponseEntity update(@RequestBody @Valid CardPutDTO cardPutDTO, @PathVariable Long id) {
+        if (id.equals(cardPutDTO.id())) {
+            cardService.update(cardPutDTO);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         } else {
-            throw new BadRequestException("ID da url diferente do contéudo");
+            throw new BadRequestException("ID da url diferentsde do contéudo");
         }
     }
 

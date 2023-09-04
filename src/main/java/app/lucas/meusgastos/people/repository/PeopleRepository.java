@@ -3,4 +3,9 @@ package app.lucas.meusgastos.people.repository;
 import app.lucas.meusgastos.people.entity.People;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PeopleRepository extends JpaRepository<People, Long> { }
+import java.util.List;
+
+public interface PeopleRepository extends JpaRepository<People, Long> {
+
+    List<People> findAllByUsername(String username);
+}

@@ -2,6 +2,7 @@ package app.lucas.meusgastos.card.service;
 
 import app.lucas.meusgastos.card.dto.CardDTO;
 import app.lucas.meusgastos.card.dto.CardIdNameColorDTO;
+import app.lucas.meusgastos.card.dto.CardPutDTO;
 import app.lucas.meusgastos.card.entity.Card;
 import app.lucas.meusgastos.card.repository.CardRepository;
 import jakarta.transaction.Transactional;
@@ -30,8 +31,8 @@ public class CardService {
         return new CardIdNameColorDTO(card.getId(), cardDTO.name(), cardDTO.color());
     }
 
-    public List<CardIdNameColorDTO> findAll() {
-        List<Card> cardList = cardRepository.findAll();
+    public List<CardIdNameColorDTO> findAll(String username) {
+        List<Card> cardList = cardRepository.findAllByUsername(username);
         List<CardIdNameColorDTO> cardResponseAllDTOList = new ArrayList<>();
 
         for (Card card : cardList) {
@@ -44,11 +45,14 @@ public class CardService {
         return cardResponseAllDTOList;
     }
 
-    public void update(CardIdNameColorDTO cardIdNameColorDTO) {
-        Card savedCard = findBYIdOrThrowError(cardIdNameColorDTO.id());
-        savedCard.setName(cardIdNameColorDTO.name());
-        savedCard.setColor(cardIdNameColorDTO.color());
-        cardRepository.save(savedCard);
+    public void update(CardPutDTO cardPutDTO) {
+        Card savedCard = findBYIdOrThrowError(cardPutDTO.id());
+
+        if (savedCard.getUsername().equals(cardPutDTO.username())) {
+            savedCard.setName(cardPutDTO.name());
+            savedCard.setColor(cardPutDTO.color());
+            cardRepository.save(savedCard);
+        }
     }
 
     public void delete(Long id) {

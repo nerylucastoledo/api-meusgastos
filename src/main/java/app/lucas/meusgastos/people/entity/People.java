@@ -56,6 +56,10 @@ public class People {
         return name;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

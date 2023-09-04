@@ -1,9 +1,12 @@
 package app.lucas.meusgastos.people.service;
 
+import app.lucas.meusgastos.exceptions.BadRequestException;
 import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.people.dto.PeoplePutDTO;
 import app.lucas.meusgastos.people.dto.PeopleRequestDTO;
 import app.lucas.meusgastos.people.entity.People;
 import app.lucas.meusgastos.people.repository.PeopleRepository;
+import app.lucas.meusgastos.user.entity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +32,8 @@ public class PeopleService {
         return new NameIdDTO(people.getId(), peopleDTO.name());
     }
 
-    public List<NameIdDTO> findAll() {
-        List<People> peopleList = peopleRepository.findAll();
+    public List<NameIdDTO> findAll(String username) {
+        List<People> peopleList = peopleRepository.findAllByUsername(username);
         List<NameIdDTO> peopleResponseList = new ArrayList<>();
 
         for (People people : peopleList) {
@@ -42,10 +45,13 @@ public class PeopleService {
         return peopleResponseList;
     }
 
-    public void update(NameIdDTO peopleNameIdDTO) {
-        People savedPeople = findBYIdOrThrowError(peopleNameIdDTO.id());
-        savedPeople.setName(peopleNameIdDTO.name());
-        peopleRepository.save(savedPeople);
+    public void update(PeoplePutDTO peoplePutDTO) {
+        People savedPeople = findBYIdOrThrowError(peoplePutDTO.id());
+
+        if (savedPeople.getUsername().equals(peoplePutDTO.username())) {
+            savedPeople.setName(peoplePutDTO.name());
+            peopleRepository.save(savedPeople);
+        }
     }
 
     public void delete(Long id) {
@@ -55,6 +61,6 @@ public class PeopleService {
 
     private People findBYIdOrThrowError(Long id) {
         return peopleRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new BadRequestException("Nenhuma pessoa encontrada com esse ID"));
     }
 }

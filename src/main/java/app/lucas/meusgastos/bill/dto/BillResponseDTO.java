@@ -9,5 +9,6 @@ public record BillResponseDTO(
         String description,
         String card,
         String people,
-        String category
-        ) { }
+        String category,
+        String date
+) { }
