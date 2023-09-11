@@ -1,5 +1,6 @@
 package app.lucas.meusgastos.category.service;
 
+import app.lucas.meusgastos.bill.service.BillService;
 import app.lucas.meusgastos.category.dto.CategoryPostDTO;
 import app.lucas.meusgastos.category.dto.CategoryPutDTO;
 import app.lucas.meusgastos.category.entity.Category;
@@ -17,6 +18,9 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private BillService billService;
 
     @Transactional
     public NameIdDTO save(CategoryPostDTO categoryDTO) {
@@ -43,13 +47,17 @@ public class CategoryService {
         return categoryResponseList;
     }
 
+    @Transactional
     public void delete(Long id) {
         Category category = findBYIdOrThrowError(id);
+        billService.deleteAllByCategory(category.getName());
         categoryRepository.delete(category);
     }
 
+    @Transactional
     public void update(CategoryPutDTO categoryPutDTO) {
         Category savedCategory = findBYIdOrThrowError(categoryPutDTO.id());
+        billService.updateAllByCategory(savedCategory.getName(), categoryPutDTO.name());
 
         if (savedCategory.getUsername().equals(categoryPutDTO.username())) {
             savedCategory.setName(categoryPutDTO.name());

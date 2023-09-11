@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("user")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -27,13 +28,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @CrossOrigin(origins = "*")
     @PostMapping(value = "/create", produces = "application/json")
     public ResponseEntity<NameIdDTO> save(@RequestBody @Valid UserDTO userDTO) {
         return new ResponseEntity(userService.save(userDTO), HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         User userEmailExists = userRepository.findByEmail(userLoginDTO.email());
@@ -51,7 +50,7 @@ public class UserController {
 
         if (currentPassword.equals(userPassword)) {
             return new ResponseEntity(
-                    new UserResponseDTO(userEmailExists.getUsername()),
+                    new UserResponseDTO(userEmailExists.getUsername(), userEmailExists.getId()),
                     HttpStatus.OK
             );
         }

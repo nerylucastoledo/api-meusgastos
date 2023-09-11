@@ -22,7 +22,7 @@ public class Bill {
     private String username;
     private String item;
     private Double value;
-    private String description;
+    private String description = "";
     private String people;
     private String category;
     private String date;
@@ -45,10 +45,6 @@ public class Bill {
         return value;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public String getPeople() {
         return people;
     }
@@ -66,7 +62,6 @@ public class Bill {
         private String username;
         private String item;
         private Double value;
-        private String description;
         private String people;
         private String category;
         private String date;
@@ -99,11 +94,6 @@ public class Bill {
             return this;
         }
 
-        public BillBuilder description(String description) {
-            this.description = description;
-            return this;
-        }
-
         public BillBuilder people(String people) {
             this.people = people;
             return this;
@@ -129,7 +119,6 @@ public class Bill {
             bill.id = this.id;
             bill.date = this.date;
             bill.item = this.item;
-            bill.description = this.description;
             bill.people = this.people;
             bill.card = this.card;
             bill.value = this.value;

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("bill")
+@CrossOrigin("*")
 public class BillController {
 
     @Autowired
@@ -41,13 +42,18 @@ public class BillController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @PostMapping
+    @PostMapping(produces = "application/json")
     public ResponseEntity save(@RequestBody @Valid BillPostDTO billPostDTO) {
         service.save(billPostDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @CrossOrigin("*")
+    @PostMapping("/list")
+    public ResponseEntity saveAll(@RequestBody @Valid BillPostDTO[] billListPostDTO) {
+        service.saveAll(billListPostDTO);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity findAllDataByDate(
             @RequestParam String username,

@@ -1,5 +1,6 @@
 package app.lucas.meusgastos.people.service;
 
+import app.lucas.meusgastos.bill.service.BillService;
 import app.lucas.meusgastos.exceptions.BadRequestException;
 import app.lucas.meusgastos.generic.dto.NameIdDTO;
 import app.lucas.meusgastos.people.dto.PeoplePutDTO;
@@ -19,6 +20,9 @@ public class PeopleService {
 
     @Autowired
     private PeopleRepository peopleRepository;
+
+    @Autowired
+    private BillService billService;
 
     @Transactional
     public NameIdDTO save(PeopleRequestDTO peopleDTO) {
@@ -45,8 +49,10 @@ public class PeopleService {
         return peopleResponseList;
     }
 
+    @Transactional
     public void update(PeoplePutDTO peoplePutDTO) {
         People savedPeople = findBYIdOrThrowError(peoplePutDTO.id());
+        billService.updateAllByPeople(savedPeople.getName(), peoplePutDTO.name());
 
         if (savedPeople.getUsername().equals(peoplePutDTO.username())) {
             savedPeople.setName(peoplePutDTO.name());
@@ -54,8 +60,10 @@ public class PeopleService {
         }
     }
 
+    @Transactional
     public void delete(Long id) {
         People people = findBYIdOrThrowError(id);
+        billService.deleteAllByPeople(people.getName());
         peopleRepository.delete(people);
     }
 

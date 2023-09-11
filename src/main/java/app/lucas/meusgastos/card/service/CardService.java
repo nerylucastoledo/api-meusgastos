@@ -1,5 +1,7 @@
 package app.lucas.meusgastos.card.service;
 
+import app.lucas.meusgastos.bill.entity.Bill;
+import app.lucas.meusgastos.bill.service.BillService;
 import app.lucas.meusgastos.card.dto.CardDTO;
 import app.lucas.meusgastos.card.dto.CardIdNameColorDTO;
 import app.lucas.meusgastos.card.dto.CardPutDTO;
@@ -17,6 +19,9 @@ public class CardService {
 
     @Autowired
     private CardRepository cardRepository;
+
+    @Autowired
+    private BillService billService;
 
     @Transactional
     public CardIdNameColorDTO save(CardDTO cardDTO) {
@@ -45,8 +50,10 @@ public class CardService {
         return cardResponseAllDTOList;
     }
 
+    @Transactional
     public void update(CardPutDTO cardPutDTO) {
         Card savedCard = findBYIdOrThrowError(cardPutDTO.id());
+        billService.updateAllByCard(savedCard.getName(), cardPutDTO.name());
 
         if (savedCard.getUsername().equals(cardPutDTO.username())) {
             savedCard.setName(cardPutDTO.name());
@@ -55,8 +62,10 @@ public class CardService {
         }
     }
 
+    @Transactional
     public void delete(Long id) {
         Card card = findBYIdOrThrowError(id);
+        billService.deleteAllByCard(card.getName());
         cardRepository.delete(card);
     }
 

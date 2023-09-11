@@ -7,7 +7,6 @@ public record BillPostDTO(
         @NotBlank String item,
         @NotBlank String username,
         @NotNull Double value,
-        @NotBlank String description,
         @NotBlank String people,
         @NotBlank String category,
         @NotBlank String date,
