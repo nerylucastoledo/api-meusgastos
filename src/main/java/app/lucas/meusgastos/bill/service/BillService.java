@@ -1,12 +1,15 @@
 package app.lucas.meusgastos.bill.service;
 
 import app.lucas.meusgastos.bill.dto.BillPostDTO;
+import app.lucas.meusgastos.bill.dto.BillPutDTO;
 import app.lucas.meusgastos.bill.dto.BillRequestDTO;
 import app.lucas.meusgastos.bill.dto.BillResponseDTO;
 import app.lucas.meusgastos.bill.entity.Bill;
 import app.lucas.meusgastos.bill.repository.BillRepository;
 import app.lucas.meusgastos.card.dto.CardIdNameColorDTO;
+import app.lucas.meusgastos.card.dto.CardPutDTO;
 import app.lucas.meusgastos.card.entity.Card;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,15 +26,33 @@ public class BillService {
 
     public List<BillResponseDTO> findAllDataByDate(String username, String date) {
         List<Bill> allDataByUsername = billRepository.findAllByUsername(username);
-        List<Bill> dataByDate = filterDataByDate(date, allDataByUsername);
 
-        List<BillResponseDTO> billList = dataByDate.stream().map(bill -> new BillResponseDTO(
+        List<BillResponseDTO> billList = allDataByUsername.stream().map(bill -> new BillResponseDTO(
+                        bill.getId(),
                         bill.getItem(),
                         bill.getValue(),
                         bill.getCard(),
                         bill.getPeople(),
                         bill.getCategory(),
-                        bill.getDate()))
+                        bill.getDate(),
+                        bill.getDescription()))
+                .collect(Collectors.toList());
+
+        return billList;
+    }
+
+    public List<BillResponseDTO> findAllDataByDateAndCard(String username, String date, String nameCard) {
+        List<Bill> allDataByUsername = billRepository.findAllByDateContainingYearCardAndUsername(username, nameCard, date);
+
+        List<BillResponseDTO> billList = allDataByUsername.stream().map(bill -> new BillResponseDTO(
+                        bill.getId(),
+                        bill.getItem(),
+                        bill.getValue(),
+                        bill.getCard(),
+                        bill.getPeople(),
+                        bill.getCategory(),
+                        bill.getDate(),
+                        bill.getDescription()))
                 .collect(Collectors.toList());
 
         return billList;
@@ -43,12 +64,14 @@ public class BillService {
         List<BillResponseDTO> billList = allDataByUsername.stream()
                 .filter(bill -> bill.getPeople().equals("Eu"))
                 .map(bill -> new BillResponseDTO(
+                        bill.getId(),
                         bill.getItem(),
                         bill.getValue(),
                         bill.getCard(),
                         bill.getPeople(),
                         bill.getCategory(),
-                        bill.getDate()))
+                        bill.getDate(),
+                        bill.getDescription()))
                 .collect(Collectors.toList());
 
         return billList;
@@ -88,6 +111,21 @@ public class BillService {
         billRepository.saveAll(billList);
     }
 
+    @Transactional
+    public void update(BillPutDTO billPutDTO) {
+        Bill savedBill = findBYIdOrThrowError(billPutDTO.id());
+
+        savedBill.setItem(billPutDTO.item());
+        savedBill.setValue(billPutDTO.value());
+        billRepository.save(savedBill);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Bill bill = findBYIdOrThrowError(id);
+        billRepository.delete(bill);
+    }
+
     public void deleteAllByPeople(String people) {
         billRepository.deleteAllByPeople(people);
     }
@@ -116,5 +154,10 @@ public class BillService {
         return billList.stream()
                 .filter(bill -> bill.getDate().equals(date))
                 .collect(Collectors.toList());
+    }
+
+    private Bill findBYIdOrThrowError(Long id) {
+        return billRepository.findById(id)
+                .orElseThrow();
     }
 }

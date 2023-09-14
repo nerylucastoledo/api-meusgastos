@@ -28,6 +28,9 @@ public class Bill {
     private String date;
     private String card;
 
+    public Long getId() {
+        return id;
+    }
 
     public String getUsername() {
         return username;
@@ -55,6 +58,18 @@ public class Bill {
 
     public String getCategory() {
         return category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
     }
 
     public static final class BillBuilder {

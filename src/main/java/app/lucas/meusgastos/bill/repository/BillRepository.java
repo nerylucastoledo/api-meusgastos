@@ -14,6 +14,8 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     List<Bill> findAllByUsername(String username);
     @Query("SELECT b FROM Bill b WHERE b.username = :username AND SUBSTRING(b.date, LENGTH(b.date) - 3) = :year")
     List<Bill> findAllByDateContainingYearAndUsername(@Param("username") String username, @Param("year") String year);
+    @Query("SELECT b FROM Bill b WHERE b.username LIKE :username AND b.card LIKE :card AND b.date LIKE :date")
+    List<Bill> findAllByDateContainingYearCardAndUsername(@Param("username") String username, @Param("card") String card, @Param("date") String date);
     Bill findByDate(String date);
     void deleteAllByPeople(String people);
     void deleteAllByCard(String card);

@@ -79,9 +79,30 @@ public class BillController {
         return new ResponseEntity(billResponse, HttpStatus.OK);
     }
 
-    @CrossOrigin("*")
+    @GetMapping("/by-card")
+    public ResponseEntity findAllDataByDateUsernameAndCard(
+            @RequestParam String username,
+            @RequestParam(required = true) String date,
+            @RequestParam(required = true) String card
+    ) {
+
+        if (username.isBlank() || date.isBlank()) {
+            throw new BadRequestException("Username e date não podem ser vazio");
+        }
+
+        List<BillResponseDTO> billList = service.findAllDataByDateAndCard(username, date, card);
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new BadRequestException("Nenhum usuário encontrado com esse username");
+        }
+
+        BillResponseAllData billResponseAllData = new BillResponseAllData(billList);
+        return new ResponseEntity(billResponseAllData, HttpStatus.OK);
+    }
+
     @GetMapping("/all")
-    public ResponseEntity fillAll(
+    public ResponseEntity filterAll(
             @RequestParam String username,
             @RequestParam String year
     ) {
@@ -99,5 +120,21 @@ public class BillController {
 
         BillResponseAllData billResponseAllData = new BillResponseAllData(billList);
         return new ResponseEntity(billResponseAllData, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity update(@RequestBody @Valid BillPutDTO billPutDTO, @PathVariable Long id) {
+        if (id.equals(billPutDTO.id())) {
+            service.update(billPutDTO);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } else {
+            throw new BadRequestException("ID da url diferentsde do contéudo");
+        }
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        service.delete(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
