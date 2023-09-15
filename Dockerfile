@@ -1,10 +1,20 @@
-FROM ubuntu:latest as BUILD
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+# Use a imagem base do Ubuntu 20.04
+FROM ubuntu:20.04
+
+# Atualize o sistema e instale as dependências necessárias
+RUN apt-get update && apt-get install -y openjdk-17-jdk maven
+
+# Crie um diretório de trabalho
+WORKDIR /app
+
+# Copie o código-fonte e o arquivo pom.xml para o diretório de trabalho
 COPY . .
 
-FROM openjdk:17-jdk-slim
-EXPOSE 8080
-COPY target/meusgastos-0.0.1-SNAPSHOT.jar /app.jar
+# Compile o projeto com o Maven
+RUN mvn clean package
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Exponha a porta em que a aplicação Spring Boot será executada
+EXPOSE 8080
+
+# Comando para iniciar a aplicação Spring Boot
+CMD ["java", "-jar", "meusgastos-0.0.1-SNAPSHOT.jar"]
