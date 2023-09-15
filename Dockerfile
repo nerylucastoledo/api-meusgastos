@@ -1,11 +1,5 @@
-# Use a imagem base do Ubuntu 20.04
-FROM ubuntu:20.04
-
-# Atualize o sistema e instale as dependências necessárias
-RUN apt-get update && apt-get install -y openjdk-17-jdk maven
-
-# Limpe o cache do Maven
-RUN rm -rf ~/.m2/repository
+# Use a imagem oficial do Maven
+FROM maven:3.8.4-openjdk-17-slim
 
 # Crie um diretório de trabalho
 WORKDIR /app
@@ -20,4 +14,4 @@ RUN mvn clean package
 EXPOSE 8080
 
 # Comando para iniciar a aplicação Spring Boot
-CMD ["java", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "-jar", "target/meusgastos-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/meusgastos-0.0.1-SNAPSHOT.jar"]
