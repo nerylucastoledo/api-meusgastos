@@ -4,6 +4,9 @@ FROM ubuntu:20.04
 # Atualize o sistema e instale as dependências necessárias
 RUN apt-get update && apt-get install -y openjdk-17-jdk maven
 
+# Limpe o cache do Maven
+RUN rm -rf ~/.m2/repository
+
 # Crie um diretório de trabalho
 WORKDIR /app
 
