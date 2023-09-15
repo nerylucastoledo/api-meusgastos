@@ -20,4 +20,4 @@ RUN mvn clean package
 EXPOSE 8080
 
 # Comando para iniciar a aplicação Spring Boot
-CMD ["java", "-jar", "meusgastos-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "-jar", "target/meusgastos-0.0.1-SNAPSHOT.jar"]
