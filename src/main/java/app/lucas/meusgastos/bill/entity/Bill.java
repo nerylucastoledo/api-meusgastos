@@ -77,6 +77,7 @@ public class Bill {
         private String username;
         private String item;
         private Double value;
+        private String description;
         private String people;
         private String category;
         private String date;
@@ -109,6 +110,11 @@ public class Bill {
             return this;
         }
 
+        public BillBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
         public BillBuilder people(String people) {
             this.people = people;
             return this;
@@ -131,14 +137,15 @@ public class Bill {
 
         public Bill build() {
             Bill bill = new Bill();
-            bill.id = this.id;
+            bill.setItem(item);
+            bill.setValue(value);
+            bill.description = this.description;
             bill.date = this.date;
-            bill.item = this.item;
-            bill.people = this.people;
-            bill.card = this.card;
-            bill.value = this.value;
-            bill.category = this.category;
             bill.username = this.username;
+            bill.category = this.category;
+            bill.card = this.card;
+            bill.people = this.people;
+            bill.id = this.id;
             return bill;
         }
     }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public record BillPostDTO(
         @NotBlank String item,
+        String description,
         @NotBlank String username,
         @NotNull Double value,
         @NotBlank String people,

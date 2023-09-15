@@ -83,6 +83,7 @@ public class BillService {
                 .builder()
                 .username(billPostDTO.username())
                 .item(billPostDTO.item())
+                .description(billPostDTO.description())
                 .value(billPostDTO.value())
                 .people(billPostDTO.people())
                 .category(billPostDTO.category())
@@ -99,6 +100,7 @@ public class BillService {
             Bill bill = Bill.BillBuilder
                     .builder()
                     .username(billPost.username())
+                    .description(billPost.description())
                     .item(billPost.item())
                     .value(billPost.value())
                     .people(billPost.people())
