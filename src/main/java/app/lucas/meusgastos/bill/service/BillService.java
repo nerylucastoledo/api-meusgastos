@@ -26,8 +26,9 @@ public class BillService {
 
     public List<BillResponseDTO> findAllDataByDate(String username, String date) {
         List<Bill> allDataByUsername = billRepository.findAllByUsername(username);
+        List<Bill> filterByDate = allDataByUsername.stream().filter(data -> data.getDate().equals(date)).collect(Collectors.toList());
 
-        List<BillResponseDTO> billList = allDataByUsername.stream().map(bill -> new BillResponseDTO(
+        List<BillResponseDTO> billList = filterByDate.stream().map(bill -> new BillResponseDTO(
                         bill.getId(),
                         bill.getItem(),
                         bill.getValue(),
