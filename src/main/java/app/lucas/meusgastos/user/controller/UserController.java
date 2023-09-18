@@ -33,6 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @CrossOrigin(origins = "*")
     public ResponseEntity loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         User userEmailExists = userRepository.findByEmail(userLoginDTO.email());
 
