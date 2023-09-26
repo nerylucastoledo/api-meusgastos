@@ -8,4 +8,5 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findAllByUsername(String username);
+    void deleteByNameAndUsername(String category, String username);
 }

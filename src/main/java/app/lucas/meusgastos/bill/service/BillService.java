@@ -129,28 +129,28 @@ public class BillService {
         billRepository.delete(bill);
     }
 
-    public void deleteAllByPeople(String people) {
-        billRepository.deleteAllByPeople(people);
+    public void deleteAllByPeople(String people, String username) {
+        billRepository.deleteAllByPeopleAndUsername(people, username);
     }
 
-    public void deleteAllByCard(String card) {
-        billRepository.deleteAllByCard(card);
+    public void deleteAllByCard(String card, String username) {
+        billRepository.deleteAllByCardAndUsername(card, username);
     }
 
-    public void deleteAllByCategory(String category) {
-        billRepository.deleteAllByCategory(category);
+    public void deleteAllByCategory(String category, String username) {
+        billRepository.deleteAllByCategoryAndUsername(category, username);
     }
 
-    public void updateAllByCard(String lastValue, String newValue) {
-        billRepository.updateAllByCard(lastValue, newValue);
+    public void updateAllByCard(String lastValue, String newValue, String username) {
+        billRepository.updateAllByCard(lastValue, newValue, username);
     }
 
-    public void updateAllByCategory(String lastValue, String newValue) {
-        billRepository.updateAllByCategory(lastValue, newValue);
+    public void updateAllByCategory(String lastValue, String newValue, String username) {
+        billRepository.updateAllByCategory(lastValue, newValue, username);
     }
 
-    public void updateAllByPeople(String lastValue, String newValue) {
-        billRepository.updateAllByPeople(lastValue, newValue);
+    public void updateAllByPeople(String lastValue, String newValue, String username) {
+        billRepository.updateAllByPeople(lastValue, newValue, username);
     }
 
     public List<Bill> filterDataByDate(String date, List<Bill> billList) {

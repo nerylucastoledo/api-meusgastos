@@ -53,9 +53,10 @@ public class CardService {
     @Transactional
     public void update(CardPutDTO cardPutDTO) {
         Card savedCard = findBYIdOrThrowError(cardPutDTO.id());
-        billService.updateAllByCard(savedCard.getName(), cardPutDTO.name());
 
         if (savedCard.getUsername().equals(cardPutDTO.username())) {
+            billService.updateAllByCard(savedCard.getName(), cardPutDTO.name(), savedCard.getUsername());
+
             savedCard.setName(cardPutDTO.name());
             savedCard.setColor(cardPutDTO.color());
             cardRepository.save(savedCard);
@@ -65,8 +66,8 @@ public class CardService {
     @Transactional
     public void delete(Long id) {
         Card card = findBYIdOrThrowError(id);
-        billService.deleteAllByCard(card.getName());
-        cardRepository.delete(card);
+        billService.deleteAllByCard(card.getName(), card.getUsername());
+        cardRepository.deleteByNameAndUsername(card.getName(), card.getUsername());
     }
 
     private Card findBYIdOrThrowError(Long id) {

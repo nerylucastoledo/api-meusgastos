@@ -1,7 +1,6 @@
 package app.lucas.meusgastos.bill.controler;
 
 import app.lucas.meusgastos.bill.dto.*;
-import app.lucas.meusgastos.bill.entity.Bill;
 import app.lucas.meusgastos.bill.service.BillService;
 import app.lucas.meusgastos.card.entity.Card;
 import app.lucas.meusgastos.card.repository.CardRepository;
@@ -19,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("bill")

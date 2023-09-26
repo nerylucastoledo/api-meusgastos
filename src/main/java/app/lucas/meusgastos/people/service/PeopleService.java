@@ -52,19 +52,21 @@ public class PeopleService {
     @Transactional
     public void update(PeoplePutDTO peoplePutDTO) {
         People savedPeople = findBYIdOrThrowError(peoplePutDTO.id());
-        billService.updateAllByPeople(savedPeople.getName(), peoplePutDTO.name());
 
         if (savedPeople.getUsername().equals(peoplePutDTO.username())) {
+            billService.updateAllByPeople(savedPeople.getName(), peoplePutDTO.name(), savedPeople.getUsername());
+
             savedPeople.setName(peoplePutDTO.name());
             peopleRepository.save(savedPeople);
         }
+
     }
 
     @Transactional
     public void delete(Long id) {
         People people = findBYIdOrThrowError(id);
-        billService.deleteAllByPeople(people.getName());
-        peopleRepository.delete(people);
+        billService.deleteAllByPeople(people.getName(), people.getUsername());
+        peopleRepository.deleteByNameAndUsername(people.getName(), people.getUsername());
     }
 
     private People findBYIdOrThrowError(Long id) {

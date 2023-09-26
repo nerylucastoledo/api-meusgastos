@@ -17,17 +17,17 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query("SELECT b FROM Bill b WHERE b.username LIKE :username AND b.card LIKE :card AND b.date LIKE :date")
     List<Bill> findAllByDateContainingYearCardAndUsername(@Param("username") String username, @Param("card") String card, @Param("date") String date);
     Bill findByDate(String date);
-    void deleteAllByPeople(String people);
-    void deleteAllByCard(String card);
-    void deleteAllByCategory(String category);
+    void deleteAllByPeopleAndUsername(String people, String username);
+    void deleteAllByCardAndUsername(String card, String username);
+    void deleteAllByCategoryAndUsername(String category, String username);
     @Modifying
-    @Query("UPDATE Bill b SET b.card = :newValue WHERE b.card = :lastValue")
-    void updateAllByCard(@Param("lastValue") String lastValue, @Param("newValue") String newValue);
+    @Query("UPDATE Bill b SET b.card = :newValue WHERE b.card = :lastValue AND b.username LIKE :username")
+    void updateAllByCard(@Param("lastValue") String lastValue, @Param("newValue") String newValue, @Param("username") String username);
     @Modifying
-    @Query("UPDATE Bill b SET b.category = :newValue WHERE b.category = :lastValue")
-    void updateAllByCategory(@Param("lastValue") String lastValue, @Param("newValue") String newValue);
+    @Query("UPDATE Bill b SET b.category = :newValue WHERE b.category LIKE :lastValue AND b.username LIKE :username")
+    void updateAllByCategory(@Param("lastValue") String lastValue, @Param("newValue") String newValue, @Param("username") String username);
     @Modifying
-    @Query("UPDATE Bill b SET b.people = :newValue WHERE b.people = :lastValue")
-    void updateAllByPeople(@Param("lastValue") String lastValue, @Param("newValue") String newValue);
+    @Query("UPDATE Bill b SET b.people = :newValue WHERE b.people = :lastValue AND b.username LIKE :username")
+    void updateAllByPeople(@Param("lastValue") String lastValue, @Param("newValue") String newValue, @Param("username") String username);
     List<Bill> findAllByDate(String date);
 }

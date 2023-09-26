@@ -8,4 +8,5 @@ import java.util.List;
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     List<Card> findAllByUsername(String username);
+    void deleteByNameAndUsername(String name, String username);
 }

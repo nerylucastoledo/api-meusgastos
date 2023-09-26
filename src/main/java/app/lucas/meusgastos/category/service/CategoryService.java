@@ -50,16 +50,17 @@ public class CategoryService {
     @Transactional
     public void delete(Long id) {
         Category category = findBYIdOrThrowError(id);
-        billService.deleteAllByCategory(category.getName());
-        categoryRepository.delete(category);
+        billService.deleteAllByCategory(category.getName(), category.getUsername());
+        categoryRepository.deleteByNameAndUsername(category.getName(), category.getUsername());
     }
 
     @Transactional
     public void update(CategoryPutDTO categoryPutDTO) {
         Category savedCategory = findBYIdOrThrowError(categoryPutDTO.id());
-        billService.updateAllByCategory(savedCategory.getName(), categoryPutDTO.name());
 
         if (savedCategory.getUsername().equals(categoryPutDTO.username())) {
+            billService.updateAllByCategory(savedCategory.getName(), categoryPutDTO.name(), savedCategory.getUsername());
+
             savedCategory.setName(categoryPutDTO.name());
             categoryRepository.save(savedCategory);
         }
