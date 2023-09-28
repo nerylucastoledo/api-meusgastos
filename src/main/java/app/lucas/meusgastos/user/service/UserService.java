@@ -5,6 +5,7 @@ import app.lucas.meusgastos.generic.dto.NameIdDTO;
 import app.lucas.meusgastos.people.entity.People;
 import app.lucas.meusgastos.user.dto.UserDTO;
 import app.lucas.meusgastos.user.dto.UserSalaryDTO;
+import app.lucas.meusgastos.user.dto.UserUpdatePasswordPost;
 import app.lucas.meusgastos.user.entity.User;
 import app.lucas.meusgastos.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -35,6 +36,12 @@ public class UserService {
     public void updateSalary(UserSalaryDTO userSalaryDTO) {
         User user = findBYIdOrThrowError(userSalaryDTO.id());
         user.setSalary(userSalaryDTO.salary());
+        userRepository.save(user);
+    }
+
+    public void updatePassword(UserUpdatePasswordPost userUpdatePasswordPost) {
+        User user = userRepository.findByUsername(userUpdatePasswordPost.username());
+        user.setPassword(userUpdatePasswordPost.password());
         userRepository.save(user);
     }
 

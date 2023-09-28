@@ -3,10 +3,7 @@ package app.lucas.meusgastos.user.controller;
 import app.lucas.meusgastos.bill.dto.ResponseErrorApiDTO;
 import app.lucas.meusgastos.exceptions.BadRequestException;
 import app.lucas.meusgastos.generic.dto.NameIdDTO;
-import app.lucas.meusgastos.user.dto.UserDTO;
-import app.lucas.meusgastos.user.dto.UserLoginDTO;
-import app.lucas.meusgastos.user.dto.UserResponseDTO;
-import app.lucas.meusgastos.user.dto.UserSalaryDTO;
+import app.lucas.meusgastos.user.dto.*;
 import app.lucas.meusgastos.user.entity.User;
 import app.lucas.meusgastos.user.repository.UserRepository;
 import app.lucas.meusgastos.user.service.UserService;
@@ -60,6 +57,32 @@ public class UserController {
                 HttpStatus.UNAUTHORIZED.value(),
                 true
         ), HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping(path = "/{email}")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity getEmailUser(@PathVariable String email) {
+        User userEmailExists = userRepository.findByEmail(email);
+
+        if (userEmailExists == null) {
+            return new ResponseEntity(new ResponseErrorApiDTO(
+                    "E-mail não encontrado!",
+                    HttpStatus.UNAUTHORIZED.value(),
+                    true
+            ), HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity(
+                new UserResponseDTO(userEmailExists.getUsername(), userEmailExists.getId()),
+                HttpStatus.OK
+        );
+    }
+
+    @PutMapping(path = "reset-password")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity updatePassword(@RequestBody @Valid UserUpdatePasswordPost userUpdatePasswordPost) {
+        userService.updatePassword(userUpdatePasswordPost);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping(path = "/{id}")

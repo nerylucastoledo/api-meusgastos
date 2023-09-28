@@ -99,4 +99,8 @@ public class User {
     public void setSalary(Double salary) {
         this.salary = salary;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
