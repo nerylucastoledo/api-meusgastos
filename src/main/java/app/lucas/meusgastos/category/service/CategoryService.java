@@ -1,11 +1,11 @@
 package app.lucas.meusgastos.category.service;
 
 import app.lucas.meusgastos.bill.service.BillService;
-import app.lucas.meusgastos.category.dto.CategoryPostDTO;
+import app.lucas.meusgastos.category.dto.CategoryCreateDTO;
 import app.lucas.meusgastos.category.dto.CategoryPutDTO;
 import app.lucas.meusgastos.category.entity.Category;
 import app.lucas.meusgastos.category.repository.CategoryRepository;
-import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.generic.dto.NameIdResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class CategoryService {
     private BillService billService;
 
     @Transactional
-    public NameIdDTO save(CategoryPostDTO categoryDTO) {
+    public NameIdResponseDTO create(CategoryCreateDTO categoryDTO) {
         Category category = Category.CategoryBuilder
                 .builder()
                 .name(categoryDTO.name())
@@ -31,20 +31,7 @@ public class CategoryService {
                 .build();
 
         categoryRepository.save(category);
-        return new NameIdDTO(category.getId(), categoryDTO.name());
-    }
-
-    public List<NameIdDTO> findAll(String username) {
-        List<Category> categoryList = categoryRepository.findAllByUsername(username);
-        List<NameIdDTO> categoryResponseList = new ArrayList<>();
-
-        for (Category category : categoryList) {
-            NameIdDTO categoryNameId = new NameIdDTO(
-                    category.getId(),
-                    category.getName());
-            categoryResponseList.add(categoryNameId);
-        }
-        return categoryResponseList;
+        return new NameIdResponseDTO(category.getId(), categoryDTO.name());
     }
 
     @Transactional

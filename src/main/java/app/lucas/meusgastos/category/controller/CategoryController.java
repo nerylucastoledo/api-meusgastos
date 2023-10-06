@@ -1,12 +1,11 @@
 package app.lucas.meusgastos.category.controller;
 
-import app.lucas.meusgastos.card.dto.CardResponseApiDTO;
-import app.lucas.meusgastos.category.dto.CategoryPostDTO;
+import app.lucas.meusgastos.category.dto.CategoryCreateDTO;
 import app.lucas.meusgastos.category.dto.CategoryPutDTO;
-import app.lucas.meusgastos.category.dto.CategoryResponseApiDTO;
+import app.lucas.meusgastos.category.dto.CategoryResponseDTO;
 import app.lucas.meusgastos.category.service.CategoryService;
 import app.lucas.meusgastos.exceptions.BadRequestException;
-import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.generic.dto.NameIdResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,19 +25,9 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public CategoryResponseApiDTO save(@RequestBody @Valid CategoryPostDTO categoryDTO) {
-        NameIdDTO nameIdDTO = categoryService.save(categoryDTO);
-        return new CategoryResponseApiDTO(HttpStatus.CREATED.value(), new ArrayList<>(Collections.singleton(nameIdDTO)));
-    }
-
-    @GetMapping
-    public CategoryResponseApiDTO findAll(@RequestParam String username) {
-        if (username.isEmpty()) {
-            throw new BadRequestException("Username não pode ser vazio");
-        }
-
-        List<NameIdDTO> nameIdDTOList = categoryService.findAll(username);
-        return new CategoryResponseApiDTO(HttpStatus.OK.value(), nameIdDTOList);
+    public CategoryResponseDTO create(@RequestBody @Valid CategoryCreateDTO categoryDTO) {
+        NameIdResponseDTO nameIdResponseDTO = categoryService.create(categoryDTO);
+        return new CategoryResponseDTO(HttpStatus.CREATED.value(), new ArrayList<>(Collections.singleton(nameIdResponseDTO)));
     }
 
     @PutMapping(path = "/{id}")

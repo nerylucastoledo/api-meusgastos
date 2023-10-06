@@ -1,10 +1,10 @@
 package app.lucas.meusgastos.people.controller;
 
 import app.lucas.meusgastos.exceptions.BadRequestException;
-import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.generic.dto.NameIdResponseDTO;
 import app.lucas.meusgastos.people.dto.PeoplePutDTO;
-import app.lucas.meusgastos.people.dto.PeopleRequestDTO;
-import app.lucas.meusgastos.people.dto.PeopleResponseApiDTO;
+import app.lucas.meusgastos.people.dto.PeopleCreateDTO;
+import app.lucas.meusgastos.people.dto.PeopleResponseDTO;
 import app.lucas.meusgastos.people.service.PeopleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +25,9 @@ public class PeopleController {
     private PeopleService peopleService;
 
     @PostMapping
-    public PeopleResponseApiDTO save(@RequestBody @Valid PeopleRequestDTO peopleDTO) {
-        NameIdDTO nameIdDTO = peopleService.save(peopleDTO);
-        return new PeopleResponseApiDTO(HttpStatus.CREATED.value(), new ArrayList<>(Collections.singleton(nameIdDTO)));
-    }
-
-    @GetMapping
-    public PeopleResponseApiDTO findAll(@RequestParam String username) {
-        if (username.isEmpty()) {
-            throw new BadRequestException("Username não pode ser vazio");
-        }
-
-        List<NameIdDTO> peopleList = peopleService.findAll(username);
-        return new PeopleResponseApiDTO(HttpStatus.OK.value(), peopleList);
+    public PeopleResponseDTO create(@RequestBody @Valid PeopleCreateDTO peopleDTO) {
+        NameIdResponseDTO nameIdResponseDTO = peopleService.create(peopleDTO);
+        return new PeopleResponseDTO(HttpStatus.CREATED.value(), new ArrayList<>(Collections.singleton(nameIdResponseDTO)));
     }
 
     @PutMapping(path = "/{id}")

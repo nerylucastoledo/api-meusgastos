@@ -3,7 +3,7 @@ package app.lucas.meusgastos.user.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record UserDTO(
+public record UserCreateDTO(
         @NotBlank(message = "Nome não pode ser vazio!")
         String name,
         @NotBlank(message = "Sobrenome não pode ser vazio!")

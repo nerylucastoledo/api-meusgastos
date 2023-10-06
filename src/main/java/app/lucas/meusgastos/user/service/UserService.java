@@ -1,11 +1,10 @@
 package app.lucas.meusgastos.user.service;
 
 import app.lucas.meusgastos.exceptions.BadRequestException;
-import app.lucas.meusgastos.generic.dto.NameIdDTO;
-import app.lucas.meusgastos.people.entity.People;
-import app.lucas.meusgastos.user.dto.UserDTO;
-import app.lucas.meusgastos.user.dto.UserSalaryDTO;
-import app.lucas.meusgastos.user.dto.UserUpdatePasswordPost;
+import app.lucas.meusgastos.generic.dto.NameIdResponseDTO;
+import app.lucas.meusgastos.user.dto.UserCreateDTO;
+import app.lucas.meusgastos.user.dto.UserPutSalaryDTO;
+import app.lucas.meusgastos.user.dto.UserPutPasswordDTO;
 import app.lucas.meusgastos.user.entity.User;
 import app.lucas.meusgastos.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -19,29 +18,29 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
-    public NameIdDTO save(UserDTO userDTO) {
+    public NameIdResponseDTO create(UserCreateDTO userCreateDTO) {
         User user = User.UserBuilder
                 .builder()
-                .name(userDTO.name())
-                .lastname(userDTO.lastname())
-                .salary(userDTO.salary())
-                .email(userDTO.email())
-                .password(userDTO.password())
+                .name(userCreateDTO.name())
+                .lastname(userCreateDTO.lastname())
+                .salary(userCreateDTO.salary())
+                .email(userCreateDTO.email())
+                .password(userCreateDTO.password())
                 .build();
 
         userRepository.save(user);
-        return new NameIdDTO(user.getId(), userDTO.name());
+        return new NameIdResponseDTO(user.getId(), userCreateDTO.name());
     }
 
-    public void updateSalary(UserSalaryDTO userSalaryDTO) {
-        User user = findBYIdOrThrowError(userSalaryDTO.id());
-        user.setSalary(userSalaryDTO.salary());
+    public void updateSalary(UserPutSalaryDTO userPutSalaryDTO) {
+        User user = findBYIdOrThrowError(userPutSalaryDTO.id());
+        user.setSalary(userPutSalaryDTO.salary());
         userRepository.save(user);
     }
 
-    public void updatePassword(UserUpdatePasswordPost userUpdatePasswordPost) {
-        User user = userRepository.findByUsername(userUpdatePasswordPost.username());
-        user.setPassword(userUpdatePasswordPost.password());
+    public void updatePassword(UserPutPasswordDTO userPutPasswordDTO) {
+        User user = userRepository.findByUsername(userPutPasswordDTO.username());
+        user.setPassword(userPutPasswordDTO.password());
         userRepository.save(user);
     }
 

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>app.lucas</groupId>
 	<artifactId>meusgastos</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<name>meusgastos</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -50,6 +50,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-sql-mysql</artifactId>
+			<version>1.2.8.RELEASE</version>
 		</dependency>
 
 		<dependency>

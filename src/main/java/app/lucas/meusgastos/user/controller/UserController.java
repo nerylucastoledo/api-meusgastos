@@ -2,7 +2,7 @@ package app.lucas.meusgastos.user.controller;
 
 import app.lucas.meusgastos.bill.dto.ResponseErrorApiDTO;
 import app.lucas.meusgastos.exceptions.BadRequestException;
-import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.generic.dto.NameIdResponseDTO;
 import app.lucas.meusgastos.user.dto.*;
 import app.lucas.meusgastos.user.entity.User;
 import app.lucas.meusgastos.user.repository.UserRepository;
@@ -24,14 +24,13 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping(value = "/create", produces = "application/json")
-    public ResponseEntity<NameIdDTO> save(@RequestBody @Valid UserDTO userDTO) {
-        return new ResponseEntity(userService.save(userDTO), HttpStatus.CREATED);
+    @PostMapping(value = "/create")
+    public ResponseEntity<NameIdResponseDTO> create(@RequestBody @Valid UserCreateDTO userCreateDTO) {
+        return new ResponseEntity(userService.create(userCreateDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "*")
-    public ResponseEntity loginUser(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+    public ResponseEntity login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
         User userEmailExists = userRepository.findByEmail(userLoginDTO.email());
 
         if (userEmailExists == null) {
@@ -59,9 +58,24 @@ public class UserController {
         ), HttpStatus.UNAUTHORIZED);
     }
 
+    @PutMapping(path = "/{id}")
+    public ResponseEntity updateSalary(@RequestBody @Valid UserPutSalaryDTO userPutSalaryDTO, @PathVariable Long id) {
+        if (id.equals(userPutSalaryDTO.id())) {
+            userService.updateSalary(userPutSalaryDTO);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        } else {
+            throw new BadRequestException("ID da url diferente do contéudo");
+        }
+    }
+
+    @PutMapping(path = "reset-password")
+    public ResponseEntity updatePassword(@RequestBody @Valid UserPutPasswordDTO userPutPasswordDTO) {
+        userService.updatePassword(userPutPasswordDTO);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
     @GetMapping(path = "/{email}")
-    @CrossOrigin(origins = "*")
-    public ResponseEntity getEmailUser(@PathVariable String email) {
+    public ResponseEntity getUsernameByEmail(@PathVariable String email) {
         User userEmailExists = userRepository.findByEmail(email);
 
         if (userEmailExists == null) {
@@ -76,22 +90,5 @@ public class UserController {
                 new UserResponseDTO(userEmailExists.getUsername(), userEmailExists.getId()),
                 HttpStatus.OK
         );
-    }
-
-    @PutMapping(path = "reset-password")
-    @CrossOrigin(origins = "*")
-    public ResponseEntity updatePassword(@RequestBody @Valid UserUpdatePasswordPost userUpdatePasswordPost) {
-        userService.updatePassword(userUpdatePasswordPost);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
-
-    @PutMapping(path = "/{id}")
-    public ResponseEntity updateSalary(@RequestBody @Valid UserSalaryDTO userSalaryDTO, @PathVariable Long id) {
-        if (id.equals(userSalaryDTO.id())) {
-            userService.updateSalary(userSalaryDTO);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
-        } else {
-            throw new BadRequestException("ID da url diferente do contéudo");
-        }
     }
 }

@@ -2,12 +2,11 @@ package app.lucas.meusgastos.people.service;
 
 import app.lucas.meusgastos.bill.service.BillService;
 import app.lucas.meusgastos.exceptions.BadRequestException;
-import app.lucas.meusgastos.generic.dto.NameIdDTO;
+import app.lucas.meusgastos.generic.dto.NameIdResponseDTO;
 import app.lucas.meusgastos.people.dto.PeoplePutDTO;
-import app.lucas.meusgastos.people.dto.PeopleRequestDTO;
+import app.lucas.meusgastos.people.dto.PeopleCreateDTO;
 import app.lucas.meusgastos.people.entity.People;
 import app.lucas.meusgastos.people.repository.PeopleRepository;
-import app.lucas.meusgastos.user.entity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class PeopleService {
     private BillService billService;
 
     @Transactional
-    public NameIdDTO save(PeopleRequestDTO peopleDTO) {
+    public NameIdResponseDTO create(PeopleCreateDTO peopleDTO) {
         People people = People.PeopleBuilder
                 .builder()
                 .name(peopleDTO.name())
@@ -33,20 +32,7 @@ public class PeopleService {
                 .build();
 
         peopleRepository.save(people);
-        return new NameIdDTO(people.getId(), peopleDTO.name());
-    }
-
-    public List<NameIdDTO> findAll(String username) {
-        List<People> peopleList = peopleRepository.findAllByUsername(username);
-        List<NameIdDTO> peopleResponseList = new ArrayList<>();
-
-        for (People people : peopleList) {
-            NameIdDTO peopleNameId = new NameIdDTO(
-                    people.getId(),
-                    people.getName());
-            peopleResponseList.add(peopleNameId);
-        }
-        return peopleResponseList;
+        return new NameIdResponseDTO(people.getId(), peopleDTO.name());
     }
 
     @Transactional
@@ -59,7 +45,6 @@ public class PeopleService {
             savedPeople.setName(peoplePutDTO.name());
             peopleRepository.save(savedPeople);
         }
-
     }
 
     @Transactional
