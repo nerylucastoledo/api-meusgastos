@@ -6,8 +6,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
-    url: ${app.DATABASE_URL}
-    username: ${app.USERNAME}
-    password: ${app.PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://35.193.137.179:3306/meusgastos?useSSL=false
+    username: root
+    password: Q6a/%|T%y:-YauVB
+    driver-class-name: com.mysql.jdbc.Driver
